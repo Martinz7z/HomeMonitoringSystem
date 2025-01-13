@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en" data-arp="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='soilTempStyles.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+
+<body>
+    <header class="temp_header">
+        <a href="{{ url_for('index')}}" class="temp_logo">Home System</a>
+        <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+        <button class="hamburger_menu" onclick="toggleMenu()"><svg xmlns="http://www.w3.org/2000/svg" width="35"
+                height="35" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 17h14M5 12h14M5 7h14" />
+            </svg></button>
+
+        <nav class="temp_nav">
+            <a href="{{ url_for('index')}}" class="nav_item">Home</a>
+            <a href="{{ url_for('temp')}}" class="nav_item">Temperature</a>
+            <a href="{{ url_for('humidity')}}" class="nav_item">Humidity</a>
+            <a href="{{ url_for('soilTemp')}}" class="nav_item">Motion Sensor</a>
+            <a href="/protected_area" class="nav_item">Device</a> 
+            {% if logged_in %}
+            <a href="{{ url_for('logout') }}" class="temp_signup">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="temp_signup">Login</a>
+            {% endif %}
+        </nav>
+ 
+    </header>
+    <section class="main_page">
+        <div class="main_page_container">
+            <div class="main_page_contents">
+                <div class="tempature">
+                    <h2>Motion Status</h2>
+                    <h1>Current: {{ motion_data }}</h1>
+                    {% if motion_data == "Yes" %}
+                        <i class="fas fa-check-circle" style="color: green; font-size: 48px;"></i>
+                    {% else %}
+                        <i class="fas fa-times-circle" style="color: red; font-size: 48px;"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function updateMotionStatus() {
+            fetch('/api/soilTemp')  // Fetch from the new API endpoint
+                .then(response => response.json())
+                .then(data => {
+                    const motionText = document.querySelector('.tempature h1');
+                    const motionIcon = document.querySelector('.tempature i');
+
+                    if (data.motion === "Yes") {
+                        motionText.textContent = "Current: Motion Detected";
+                        motionIcon.className = "fas fa-check-circle";
+                        motionIcon.style.color = "green";
+                    } else {
+                        motionText.textContent = "Current: No Motion";
+                        motionIcon.className = "fas fa-times-circle";
+                        motionIcon.style.color = "red";
+                    }
+                })
+                .catch(error => console.error('Error fetching motion data:', error));
+        }
+
+        // Update every 5 seconds (00 milliseconds)
+        setInterval(updateMotionStatus, 500);
+
+        // Call the function once to load data immediately
+        updateMotionStatus();
+    </script>
+
+<script>
+    function toggleMenu() {
+        const nav = document.querySelector('.temp_nav');
+        nav.classList.toggle('active');
+    }
+</script>
+</body>
+
+</html>

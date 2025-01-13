@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='protected_area.css') }}">
+    <title>Document</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.8.2.8.js"></script>
+    <script src="static/js/main.js"></script>
+    <style>
+        .main_page_contents img {
+          margin-top: 10px ;
+        }
+        </style>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+        
+</head>
+<body onload="keepAlive(); time(), setupPubNub();">
+    <header class="temp_header">
+        <a href="{{ url_for('index')}}" class="temp_logo">Home System</a>
+        <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+        <button class="hamburger_menu" onclick="toggleMenu()"><svg xmlns="http://www.w3.org/2000/svg" width="35"
+                height="35" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 17h14M5 12h14M5 7h14" />
+            </svg></button>
+
+        <nav class="temp_nav">
+            <a href="{{ url_for('index')}}" class="nav_item">Home</a>
+            <a href="{{ url_for('temp')}}" class="nav_item">Temperature</a>
+            <a href="{{ url_for('humidity')}}" class="nav_item">Humidity</a>
+            <a href="{{ url_for('soilTemp')}}" class="nav_item">Motion Sensor</a>
+            <a href="/protected_area" class="nav_item">Device</a> 
+            {% if logged_in %}
+            <a href="{{ url_for('logout') }}" class="temp_signup">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="temp_signup">Login</a>
+            {% endif %}
+        </nav>
+ 
+    </header>
+
+    <section class="main_page">
+        <div class="main_page_container">
+            <div class="main_page_contents">
+                <div class="tempature">
+                    
+                    <h1>Sensors</h1>
+                    <h1>Connection: <span id="connection_id">...</span></h1>
+                    <h1>Motion: <span id="motion_id">...</span></h1>
+                    <input type="checkbox" id="buzzer" onclick="handleClick(this);"/>
+                    <label for="buzzer">Buzzer On</label>
+                    
+                
+                    
+                    {% if user_id==admin_id%}
+                    <h2 style="margin-bottom: 20px"> Logged in users</h2>
+                    <ul>
+                        {% for user in online_users["users"] %}
+                        <li style="margin-bottom: 20px">
+                            <span>{{user[0]}}<br></span>
+                            <input type="checkbox" id="read-user-{{user[1]}}" {{user[2]}}>Read</input>
+                            <input type="checkbox" id="write-user-{{user[1]}}" {{user[3]}}>Write</input>
+                            <button id="access-user-{{user[1]}}" onClick=grantAccess(this)>Grant Access</button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {%endif%}
+                    
+                
+                    <img src="{{ url_for('static', filename='images/cold.png') }}" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

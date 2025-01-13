@@ -1,0 +1,132 @@
+:root {
+    --dark: #0A0A0A;
+    /* Pitch Black */
+    --normal: #2A2A72;
+    /* Neon Blue */
+}
+
+
+
+.container {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.temp_header {
+    position: relative;
+}
+
+.home_page_contents {
+    width: auto;
+    max-width: 600px;
+    margin-right: 0;
+}
+
+
+
+.home_image img {
+    max-width: 500px;
+}
+
+.home_page {
+    min-height: 95vh;
+    height: auto;
+    background-image: radial-gradient(circle at 70% 50%, white 20%, var(--normal) 50%), radial-gradient(circle at 70% 50%, #ff5733 30%, white 70%);
+}
+
+@media only screen and (max-width: 888px) {
+    .container {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+
+.tempature {
+    box-shadow: 0 4px 8px 2px var(--dark), 0 4px 8px 2px var(--normal) !important;
+
+}
+
+/* Base Styles */
+.temp_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Hamburger Menu Button */
+.hamburger_menu {
+    display: none;
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .temp_nav {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        position: absolute;
+        top: 70px;
+        width: 100%;
+        padding: 10px;
+        right: 0;
+        left: 0;
+
+    }
+
+
+    .home_image img {
+        max-width: 100%;
+    }
+
+
+    .container {
+        flex-direction: column-reverse !important;
+    }
+
+    .temp_signup {
+        border-color: white;
+    }
+
+
+    .temp_header {
+        padding: 20px;
+    }
+
+    .temp_nav.active {
+        display: flex;
+        background-color: var(--dark);
+    }
+
+    .temp_nav.active * {
+        color: white;
+    }
+
+    .hamburger_menu {
+        display: block;
+    }
+
+    .temp_signup {
+        font-size: 0.9em;
+    }
+}
+
+
+.main-page {
+    max-height: 90vh;
+    height: auto;
+}
+
+#currentTemperature {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.tempature {
+    padding: 20px;
+}
